@@ -1,12 +1,12 @@
-"""Memory, puzzle game of number pairs.
+"""
+Juego: De Memoria
 
-Exercises:
 
-1. Count and print how many taps occur.
-2. Decrease the number of tiles to a 4x4 grid.
-3. Detect when all tiles are revealed.
-4. Center single-digit tile.
-5. Use letters instead of tiles.
+Programador 1: Ivan Santiago Hernandez Mendoza - A01662556
+Programador 2: Diego Jacobo Martínez - A01656583  
+
+Fecha: 11 / 05 / 2022
+
 """
 
 from random import *
@@ -19,6 +19,7 @@ tiles = list(range(32)) * 2
 state = {'mark': None}
 hide = [True] * 64
 tapCount = 0
+
 
 
 def square(x, y):
@@ -46,12 +47,16 @@ def xy(count):
 
 def tap(x, y):
     """Update mark and hidden tiles based on tap."""
-    
+
+    global tapCount
+    tapCount+= 1
     spot = index(x, y)
     mark = state['mark']
 
     if mark is None or mark == spot or tiles[mark] != tiles[spot]:
         state['mark'] = spot
+        
+        
     else:
         hide[spot] = False
         hide[mark] = False
@@ -75,19 +80,32 @@ def draw():
     if mark is not None and hide[mark]:
         x, y = xy(mark)
         up()
-        goto(x + 2, y)
+        goto(x + 25, y)  # Haciendo referencia a la línea 31, en donde se hacen cuadros con una distancia de 50 en cada lado, es por eso qeu usamos x + 25
         color('black')
-        write(tiles[mark], font=('Arial', 30, 'normal'))
+        write(tiles[mark], font=('Arial', 30, 'normal'), align = 'center')    # Agregamos un " align = center", para centrar el texto de tiles.    
+
+    up()
+    goto(-20,210)  
+    color('black')
+    write('Taps:', font=('Arial', 10, 'normal'), align = 'center')      # Código correspondiente a texto en la parte de arriba del juego, señalizando Taps
+
+    up()
+    goto(0,210)  
+    color('black')
+    write(tapCount, font=('Arial', 10, 'normal'), align = 'center')    # Despliegue de contador de taps
+    
+    
 
     update()
     ontimer(draw, 100)
 
 
 shuffle(tiles)
-setup(420, 420, 370, 0)
+setup(500, 500, 370, 0)
 addshape(car)
 hideturtle()
 tracer(False)
+
 onscreenclick(tap)
 draw()
 done()
